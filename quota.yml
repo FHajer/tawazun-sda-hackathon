@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ResourceQuota
-mtadata: 
-  name: Hajer-quota
+metadata:
+  name: hajer-quota
 spec:
   hard:
-    request.cpu: "2"
-    request.memory: 2Gi
+    requests.cpu: "2"
+    requests.memory: 2Gi
     limits.cpu: "4"
     limits.memory: 4Gi
