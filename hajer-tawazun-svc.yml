@@ -1,17 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tawazun-svc
-  namespace: hajer-tawazun
-  labels: 
-    name: hajer
+  name: tawazun-serv
 spec:
-  selector:
-    app: tawazun
-    service: tawazun-svc
+ selector:
+   app: tawazun-web
  type: NodePort
-  ports:
+ ports:
     - protocol: TCP
-      port: 80 #This is a serive port
+      port: 8080  #This is a serive port
       targetPort: 8080 #This is the target port of the pods
-      nodport: 32000 #This port is enable on node to send the traffic
+      nodePort: 30020 #This port is enable on node to send the traffic
