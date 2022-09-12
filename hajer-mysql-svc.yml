@@ -1,17 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cluster-ip-service
-  namespace: hajer-tawazun
-  labels:
-    app: sql
-    name: hajer
+  name: mysql
 spec:
-  type: ClusterIP
-  ports:
-    - name: sql-port
+ selector:
+    app: mysql
+ type: ClusterIP
+ ports:
+    - protocol: TCP
       port: 3306
-      targetPort: 3306
-      protocol: TCP
-  selector:
-    app: sql
