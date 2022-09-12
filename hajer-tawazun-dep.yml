@@ -1,55 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tawazun-deploy
-  namespace: hajer-tawazun
+  name: tawazun-web
   labels:
-    app: tawazun
-    service: tawazun-svc
+    app: tawazun-web
     name: hajer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tawazun
-      service: tawazun-svc
+      app: tawazun-web
   template:
     metadata:
       labels:
-        app: tawazun
-        service: tawazun-svc
+        app: tawazun-web
     spec:
       containers:
-        - image: 000h/tawazun 
-          name: tawazun
-           args:
-          - /bin/sh
-          - -c 
-          - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
-
-        livenessProbe:
-          exec:
-            command:
-              - cat
-              - /tmp/healthy
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          
-        ports:
-        - name: liveness-port
-          containerPort: 8080
-        startupProbe:
-          httpGet:
-            path: /maven.html
-            port: liveness-port
-          failureThreshold: 30
-          periodSeconds: 10
-          resources: 
-            requests: 
-              memory: 250Mi
-              cpu: "250m"
-            limits:
-              memory: 512Mi
-              cpu: "500m"
+        - image: 000h/tawazun
+          name: tawazun-web 
+          env:
+            - name: DB_URL
+              value: mysql
+            - name: DB_PORT
+              value: '3306'  
+            - name: DB_NAME
+              value: tawazun  
+            - name: DB_USERNAME
+              value: root  
+            - name: DB_PASSWORD
+              value: DevOps2022
           ports:
             - containerPort: 8080
