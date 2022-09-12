@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql
+  namespace: hajer-tawazun
+  labels:
+    app: sql
+    name: hajer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql
+  template:
+    metadata:
+      labels:
+        app: sql
+    spec:
+      volumes:
+        - name: sql-pv-claim
+          persistentVolumeClaim:
+            claimName: sql-pv-claim
+      containers:
+        - image: mysql
+          name: mysql
+          resources: 
+            requests: 
+              memory: 250Mi
+              cpu: "250m"
+            limits:
+              memory: 512Mi
+              cpu: "500m"
+          env:
+            - name: MYSQL_USER
+              value: "mysql"
+            - name: MYSQL_DATABASE
+              value: "mysql"
+            - name: MYSQL_PASSWORD
+              value: "mysql"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "mysql"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: sql-pv-claim

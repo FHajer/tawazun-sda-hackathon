@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tawazun-deploy
+  namespace: hajer-tawazun
+  labels:
+    app: tawazun
+    service: tawazun-svc
+    name: hajer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tawazun
+      service: tawazun-svc
+  template:
+    metadata:
+      labels:
+        app: tawazun
+        service: tawazun-svc
+    spec:
+      containers:
+        - image: 000h/tawazun 
+          name: tawazun
+           args:
+          - /bin/sh
+          - -c 
+          - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
+
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          
+        ports:
+        - name: liveness-port
+          containerPort: 8080
+        startupProbe:
+          httpGet:
+            path: /maven.html
+            port: liveness-port
+          failureThreshold: 30
+          periodSeconds: 10
+          resources: 
+            requests: 
+              memory: 250Mi
+              cpu: "250m"
+            limits:
+              memory: 512Mi
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
